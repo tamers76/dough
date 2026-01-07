@@ -1,0 +1,921 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sourdough Calculator | Artisan Precision</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0a0f1c;
+      --bg-gradient: linear-gradient(145deg, #0a0f1c 0%, #111827 50%, #0f172a 100%);
+      --card:#13192a;
+      --card-hover:#1a2238;
+      --card-border: rgba(212,175,55,0.12);
+      --card-glow: rgba(212,175,55,0.08);
+      --text:#f8fafc;
+      --text-secondary:#94a3b8;
+      --muted:#64748b;
+      --gold:#d4af37;
+      --gold-light:#f4d03f;
+      --gold-dark:#b8941f;
+      --emerald:#10b981;
+      --sapphire:#3b82f6;
+      --ruby:#ef4444;
+      --shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+      --shadow-gold: 0 8px 32px rgba(212,175,55,0.15);
+      --radius:20px;
+      --radius-sm:12px;
+    }
+    
+    *{box-sizing:border-box; margin:0; padding:0;}
+    
+    body{
+      min-height:100vh;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg-gradient);
+      color:var(--text);
+      position:relative;
+      overflow-x:hidden;
+    }
+    
+    /* Luxury background pattern */
+    body::before{
+      content:'';
+      position:fixed;
+      top:0;left:0;right:0;bottom:0;
+      background: 
+        radial-gradient(ellipse 80% 50% at 20% -10%, rgba(212,175,55,0.15), transparent 50%),
+        radial-gradient(ellipse 60% 40% at 80% 10%, rgba(59,130,246,0.1), transparent 45%),
+        radial-gradient(ellipse 50% 50% at 50% 100%, rgba(16,185,129,0.08), transparent 40%);
+      pointer-events:none;
+      z-index:0;
+    }
+    
+    /* Subtle grid pattern */
+    body::after{
+      content:'';
+      position:fixed;
+      top:0;left:0;right:0;bottom:0;
+      background-image: 
+        linear-gradient(rgba(212,175,55,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(212,175,55,0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events:none;
+      z-index:0;
+    }
+    
+    .wrap{
+      position:relative;
+      z-index:1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 60px 24px 80px;
+    }
+    
+    header{
+      text-align:center;
+      margin-bottom:48px;
+      animation: fadeInDown 0.8s ease-out;
+    }
+    
+    @keyframes fadeInDown{
+      from{ opacity:0; transform:translateY(-20px); }
+      to{ opacity:1; transform:translateY(0); }
+    }
+    
+    @keyframes fadeInUp{
+      from{ opacity:0; transform:translateY(30px); }
+      to{ opacity:1; transform:translateY(0); }
+    }
+    
+    @keyframes shimmer{
+      0%{ background-position: -200% center; }
+      100%{ background-position: 200% center; }
+    }
+    
+    .logo{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:12px;
+      margin-bottom:20px;
+    }
+    
+    .logo-icon{
+      width:52px;
+      height:52px;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 50%, var(--gold-dark) 100%);
+      border-radius:14px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow: var(--shadow-gold);
+    }
+    
+    .logo-icon svg{
+      width:28px;
+      height:28px;
+      fill: var(--bg);
+    }
+    
+    h1{
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(36px, 5vw, 52px);
+      font-weight: 600;
+      letter-spacing:-0.02em;
+      background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 40%, var(--gold-dark) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom:12px;
+    }
+    
+    .subtitle{
+      color:var(--text-secondary);
+      font-size: 16px;
+      line-height:1.6;
+      max-width:560px;
+      margin:0 auto;
+    }
+    .subtitle strong{
+      color:var(--gold);
+      font-weight:600;
+    }
+    
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      font-size:11px;
+      font-weight:600;
+      text-transform:uppercase;
+      letter-spacing:0.1em;
+      color: var(--gold);
+      background: linear-gradient(135deg, rgba(212,175,55,0.15), rgba(212,175,55,0.05));
+      border:1px solid rgba(212,175,55,0.3);
+      padding: 8px 16px;
+      border-radius: 100px;
+      margin-top:20px;
+    }
+    .badge::before{
+      content:'✦';
+      font-size:10px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    @media (max-width: 900px){
+      .grid{grid-template-columns:1fr}
+    }
+
+    .card{
+      background: linear-gradient(165deg, var(--card) 0%, rgba(19,25,42,0.95) 100%);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,0.03);
+      overflow:hidden;
+      animation: fadeInUp 0.8s ease-out backwards;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:nth-child(1){ animation-delay: 0.1s; }
+    .card:nth-child(2){ animation-delay: 0.25s; }
+    
+    .card:hover{
+      transform: translateY(-4px);
+      box-shadow: var(--shadow), 0 0 60px rgba(212,175,55,0.08);
+    }
+    
+    .card .top{
+      padding: 24px 28px 20px;
+      border-bottom: 1px solid var(--card-border);
+      background: linear-gradient(180deg, rgba(212,175,55,0.04) 0%, transparent 100%);
+      position:relative;
+    }
+    
+    .card .top::after{
+      content:'';
+      position:absolute;
+      bottom:0;
+      left:28px;
+      right:28px;
+      height:1px;
+      background: linear-gradient(90deg, transparent, rgba(212,175,55,0.3), transparent);
+    }
+    
+    .card h2{
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 22px;
+      font-weight: 600;
+      color:var(--text);
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    
+    .card h2 .icon{
+      width:24px;
+      height:24px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      border-radius:6px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    
+    .card h2 .icon svg{
+      width:14px;
+      height:14px;
+      fill:var(--bg);
+    }
+    
+    .card .hint{
+      margin:8px 0 0;
+      color:var(--muted);
+      font-size: 13px;
+    }
+    .card .body{
+      padding: 24px 28px 28px;
+    }
+
+    .form{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    @media (max-width: 520px){
+      .form{grid-template-columns:1fr}
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+    }
+    
+    label{
+      display:flex;
+      align-items:center;
+      gap:6px;
+      font-size: 12px;
+      font-weight:600;
+      text-transform:uppercase;
+      letter-spacing:0.05em;
+      color: var(--text-secondary);
+      margin-bottom: 10px;
+    }
+    
+    label .unit{
+      font-size:10px;
+      color:var(--muted);
+      font-weight:500;
+      text-transform:none;
+      letter-spacing:0;
+    }
+    
+    input{
+      width:100%;
+      border:1px solid rgba(212,175,55,0.15);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      font-size: 16px;
+      font-family: 'DM Sans', sans-serif;
+      font-weight:500;
+      color:var(--text);
+      background: rgba(0,0,0,0.3);
+      outline:none;
+      transition: all 0.25s ease;
+    }
+    input::placeholder{
+      color:var(--muted);
+    }
+    input:hover{
+      border-color: rgba(212,175,55,0.3);
+      background: rgba(0,0,0,0.4);
+    }
+    input:focus{
+      border-color: var(--gold);
+      background: rgba(0,0,0,0.5);
+      box-shadow: 0 0 0 4px rgba(212,175,55,0.1), 0 0 20px rgba(212,175,55,0.1);
+    }
+    
+    .row{
+      display:flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+    
+    button{
+      border:0;
+      border-radius: var(--radius-sm);
+      padding: 14px 24px;
+      font-weight: 600;
+      font-size: 14px;
+      font-family: 'DM Sans', sans-serif;
+      cursor:pointer;
+      transition: all 0.25s ease;
+      position:relative;
+      overflow:hidden;
+    }
+    
+    .primary{
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+      color: var(--bg);
+      box-shadow: var(--shadow-gold);
+    }
+    .primary::before{
+      content:'';
+      position:absolute;
+      top:0;left:0;right:0;bottom:0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      background-size: 200% 100%;
+      opacity:0;
+      transition: opacity 0.3s;
+    }
+    .primary:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(212,175,55,0.3);
+    }
+    .primary:hover::before{
+      opacity:1;
+      animation: shimmer 1.5s infinite;
+    }
+    .primary:active{
+      transform: translateY(0);
+    }
+    
+    .ghost{
+      background: transparent;
+      border:1px solid rgba(212,175,55,0.2);
+      color: var(--text-secondary);
+    }
+    .ghost:hover{
+      border-color: rgba(212,175,55,0.4);
+      color:var(--text);
+      background: rgba(212,175,55,0.05);
+    }
+    
+    .note{
+      margin-top: 20px;
+      padding:16px;
+      background: rgba(0,0,0,0.2);
+      border-radius: var(--radius-sm);
+      border:1px solid rgba(100,116,139,0.2);
+    }
+    .note-title{
+      font-size:11px;
+      font-weight:600;
+      text-transform:uppercase;
+      letter-spacing:0.08em;
+      color:var(--muted);
+      margin-bottom:8px;
+    }
+    .note-content{
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height:1.6;
+    }
+    .mono{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size:11px;
+      background: rgba(212,175,55,0.1);
+      padding:2px 6px;
+      border-radius:4px;
+      color:var(--gold);
+    }
+
+    /* Radio button group */
+    .radio-group{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:8px;
+      margin-bottom:12px;
+    }
+    .radio-option{
+      position:relative;
+    }
+    .radio-option input[type="radio"]{
+      position:absolute;
+      opacity:0;
+      width:100%;
+      height:100%;
+      top:0;
+      left:0;
+      cursor:pointer;
+      z-index:2;
+      margin:0;
+    }
+    .radio-option label{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding:14px 12px;
+      min-height:48px;
+      border:none;
+      border-radius:var(--radius-sm);
+      background:rgba(255,255,255,0.05);
+      cursor:pointer;
+      transition:all 0.25s ease;
+      text-transform:none;
+      letter-spacing:0;
+      font-size:14px;
+      font-weight:500;
+      margin-bottom:0;
+      width:100%;
+      white-space:nowrap;
+      -webkit-tap-highlight-color:transparent;
+      user-select:none;
+    }
+    .radio-option label .radio-dot{
+      width:16px;
+      height:16px;
+      min-width:16px;
+      border:2px solid rgba(212,175,55,0.3);
+      border-radius:50%;
+      position:relative;
+      transition:all 0.25s ease;
+    }
+    .radio-option label .radio-dot::after{
+      content:'';
+      position:absolute;
+      top:50%;
+      left:50%;
+      transform:translate(-50%,-50%) scale(0);
+      width:8px;
+      height:8px;
+      background:var(--gold);
+      border-radius:50%;
+      transition:transform 0.2s ease;
+    }
+    .radio-option input[type="radio"]:checked + label{
+      background:rgba(212,175,55,0.15);
+      color:var(--gold);
+    }
+    .radio-option input[type="radio"]:checked + label .radio-dot{
+      border-color:var(--gold);
+    }
+    .radio-option input[type="radio"]:checked + label .radio-dot::after{
+      transform:translate(-50%,-50%) scale(1);
+    }
+    .radio-option label:hover{
+      background:rgba(255,255,255,0.08);
+    }
+    .starter-input-wrapper{
+      overflow:hidden;
+      transition:all 0.3s ease;
+    }
+    .starter-input-wrapper.hidden{
+      max-height:0;
+      opacity:0;
+      margin-top:0;
+    }
+    .starter-input-wrapper.visible{
+      max-height:100px;
+      opacity:1;
+      margin-top:12px;
+    }
+
+    .results{
+      display:grid;
+      gap: 12px;
+    }
+    
+    .kpi{
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm);
+      padding: 18px 20px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      background: linear-gradient(135deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.15) 100%);
+      transition: all 0.25s ease;
+      position:relative;
+      overflow:hidden;
+    }
+    
+    .kpi::before{
+      content:'';
+      position:absolute;
+      left:0;
+      top:0;
+      bottom:0;
+      width:3px;
+      background: linear-gradient(180deg, var(--gold), var(--gold-dark));
+      opacity:0;
+      transition: opacity 0.25s;
+    }
+    
+    .kpi:hover{
+      background: linear-gradient(135deg, rgba(212,175,55,0.08) 0%, rgba(0,0,0,0.2) 100%);
+      border-color: rgba(212,175,55,0.25);
+    }
+    
+    .kpi:hover::before{
+      opacity:1;
+    }
+    
+    .kpi:nth-child(1) .val{ color: var(--emerald); }
+    .kpi:nth-child(2) .val{ color: var(--sapphire); }
+    .kpi:nth-child(3) .val{ color: var(--gold-light); }
+    .kpi:nth-child(4) .val{ color: var(--text); }
+    
+    .kpi .name{
+      color: var(--text-secondary);
+      font-size: 13px;
+      font-weight:500;
+    }
+    .kpi .val{
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing:-0.02em;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+    }
+    .small{
+      font-size: 13px;
+      color: var(--muted);
+      margin-left: 4px;
+      font-weight: 500;
+      font-family: 'DM Sans', sans-serif;
+    }
+    
+    .footer{
+      margin-top: 16px;
+      padding:16px 18px;
+      background: rgba(212,175,55,0.05);
+      border:1px solid rgba(212,175,55,0.12);
+      border-radius: var(--radius-sm);
+    }
+    .footer div{
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height:1.6;
+    }
+    .footer strong{
+      color:var(--gold);
+    }
+    .footer .check{
+      margin-top:8px;
+      padding-top:8px;
+      border-top:1px solid rgba(212,175,55,0.1);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+    .footer .check-label{
+      color:var(--muted);
+    }
+    .footer .check-val{
+      font-size:16px;
+      font-weight:700;
+      color:var(--emerald);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+    }
+    
+    .copy-btn{
+      width:100%;
+      margin-top:12px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding:12px 16px;
+      background:rgba(212,175,55,0.1);
+      border:1px solid rgba(212,175,55,0.2);
+      border-radius:var(--radius-sm);
+      color:var(--gold);
+      font-size:13px;
+      font-weight:600;
+      cursor:pointer;
+      transition:all 0.25s ease;
+    }
+    .copy-btn svg{
+      width:16px;
+      height:16px;
+    }
+    .copy-btn:hover{
+      background:rgba(212,175,55,0.15);
+      border-color:rgba(212,175,55,0.3);
+      transform:translateY(-1px);
+    }
+    .copy-btn:active{
+      transform:translateY(0);
+    }
+    .copy-btn.copied{
+      background:rgba(16,185,129,0.1);
+      border-color:rgba(16,185,129,0.3);
+      color:var(--emerald);
+    }
+
+    .warn{
+      margin-top: 12px;
+      padding: 14px 16px;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(239,68,68,0.3);
+      background: linear-gradient(135deg, rgba(239,68,68,0.12), rgba(239,68,68,0.05));
+      color: #fca5a5;
+      display:none;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    
+    /* Bottom decorative element */
+    .brand-footer{
+      text-align:center;
+      margin-top:48px;
+      padding-top:32px;
+      border-top:1px solid var(--card-border);
+    }
+    .brand-footer p{
+      font-size:12px;
+      color:var(--muted);
+      letter-spacing:0.05em;
+    }
+    .brand-footer .brand{
+      color:var(--gold);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size:14px;
+      font-weight:600;
+    }
+
+    /* Mobile */
+    @media (max-width: 520px){
+      .wrap{ padding: 32px 16px 60px; }
+      header{ margin-bottom:32px; }
+      .subtitle{ font-size:14px; }
+      .card .top{ padding: 18px 18px 16px; }
+      .card .top::after{ left:18px; right:18px; }
+      .card .body{ padding: 18px 18px 22px; }
+      .card h2{ font-size:20px; }
+      .row{ flex-direction:column; }
+      .row button{ width:100%; padding:16px; }
+      .kpi{ padding:14px 16px; }
+      .kpi .val{ font-size:20px; }
+      .note{ padding:14px; }
+      .footer{ padding:14px; }
+    }
+
+    @media (hover: none) and (pointer: coarse){
+      .card:hover{ transform: none; }
+      .primary:hover{ transform: none; }
+      .primary:active{ transform: scale(0.98); opacity:0.9; }
+      .kpi:hover{ background: linear-gradient(135deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.15) 100%); border-color: var(--card-border); }
+      .kpi:hover::before{ opacity:0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+        </div>
+      </div>
+      <h1>Sourdough Calculator</h1>
+      <p class="subtitle">
+        Precision calculations for artisan bakers. Overall hydration includes starter 
+        (fixed at <strong>100% hydration</strong>).
+      </p>
+      <div class="badge">Artisan Precision Tool</div>
+    </header>
+
+    <div class="grid">
+      <!-- INPUTS -->
+      <section class="card">
+        <div class="top">
+          <h2>
+            <span class="icon">
+              <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H9V5h6v2z"/></svg>
+            </span>
+            Recipe Inputs
+          </h2>
+          <p class="hint">Enter your desired parameters below</p>
+        </div>
+        <div class="body">
+          <div class="form">
+            <div class="field">
+              <label>Dough Weight <span class="unit">(grams)</span></label>
+              <input id="dough" type="number" inputmode="decimal" min="0" step="1" value="500" placeholder="500">
+            </div>
+            <div class="field">
+              <label>Hydration <span class="unit">(percent)</span></label>
+              <input id="hydration" type="number" inputmode="decimal" min="0" step="0.1" value="70" placeholder="70">
+            </div>
+            <div class="field">
+              <label>Leavening Type</label>
+              <div class="radio-group">
+                <div class="radio-option">
+                  <input type="radio" id="typeStarter" name="leaveningType" value="starter" checked>
+                  <label for="typeStarter">
+                    <span class="radio-dot"></span>
+                    Starter
+                  </label>
+                </div>
+                <div class="radio-option">
+                  <input type="radio" id="typeDryYeast" name="leaveningType" value="dryYeast">
+                  <label for="typeDryYeast">
+                    <span class="radio-dot"></span>
+                    Dry Yeast
+                  </label>
+                </div>
+              </div>
+              <div class="starter-input-wrapper visible" id="starterInputWrapper">
+                <input id="starter" type="number" inputmode="decimal" min="0" step="1" value="120" placeholder="Starter weight in grams">
+              </div>
+            </div>
+            <div class="field">
+              <label>Salt <span class="unit">(% of total dough)</span></label>
+              <input id="saltPct" type="number" inputmode="decimal" min="0" step="0.1" value="1" placeholder="1">
+            </div>
+          </div>
+
+          <div class="row">
+            <button class="primary" id="calcBtn" type="button">Calculate Recipe</button>
+            <button class="ghost" id="resetBtn" type="button">Reset</button>
+          </div>
+
+          <div class="note">
+            <div class="note-title">Formula Reference</div>
+            <div class="note-content">
+              <span class="mono">Ft = (W - saltG) / (1 + H)</span> &nbsp;•&nbsp; 
+              <span class="mono">Wt = H × Ft</span><br>
+              Salt = <span class="mono">p × W</span> &nbsp;•&nbsp; Starter contributes <span class="mono">S/2</span> flour and <span class="mono">S/2</span> water
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- OUTPUTS -->
+      <section class="card">
+        <div class="top">
+          <h2>
+            <span class="icon">
+              <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+            </span>
+            Results
+          </h2>
+          <p class="hint">Amounts to add (excluding starter contribution)</p>
+        </div>
+        <div class="body">
+          <div class="results">
+            <div class="kpi">
+              <div class="name">Flour to Add</div>
+              <div class="val"><span id="flourAdd">—</span><span class="small">g</span></div>
+            </div>
+            <div class="kpi">
+              <div class="name">Water to Add</div>
+              <div class="val"><span id="waterAdd">—</span><span class="small">g</span></div>
+            </div>
+            <div class="kpi">
+              <div class="name">Salt</div>
+              <div class="val"><span id="saltG">—</span><span class="small">g</span></div>
+            </div>
+            <div class="kpi">
+              <div class="name">Preferment Ratio</div>
+              <div class="val"><span id="prefPct">—</span><span class="small">%</span></div>
+            </div>
+
+            <div class="footer">
+              <div>Starter assumed: <strong>100% hydration</strong> (equal parts flour & water)</div>
+              <div class="check">
+                <span class="check-label">Overall Hydration Verification</span>
+                <span class="check-val"><span id="checkHyd">—</span>%</span>
+              </div>
+            </div>
+
+            <button class="copy-btn" id="copyBtn" type="button">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+              </svg>
+              Copy Recipe
+            </button>
+
+            <div class="warn" id="warnBox"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+    
+    <div class="brand-footer">
+      <p>Crafted with precision by <span class="brand">Tamers</span></p>
+    </div>
+  </div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    function clamp(n, min=0){ return isFinite(n) ? Math.max(min, n) : 0; }
+    function roundTo(n, d=0){ const p=10**d; return Math.round(n*p)/p; }
+    function fmt(n,d=0){ return roundTo(n,d).toLocaleString(undefined,{minimumFractionDigits:d,maximumFractionDigits:d}); }
+
+    function updateLeaveningType(){
+      const isDryYeast = $("typeDryYeast").checked;
+      const wrapper = $("starterInputWrapper");
+      if (isDryYeast){
+        wrapper.classList.remove("visible");
+        wrapper.classList.add("hidden");
+        $("starter").value = 0;
+      } else {
+        wrapper.classList.remove("hidden");
+        wrapper.classList.add("visible");
+        if ($("starter").value === "0" || $("starter").value === ""){
+          $("starter").value = 120;
+        }
+      }
+      calculate();
+    }
+
+    function reset(){
+      $("dough").value = 500;
+      $("hydration").value = 70;
+      $("starter").value = 120;
+      $("saltPct").value = 1;
+      $("typeStarter").checked = true;
+      updateLeaveningType();
+      calculate();
+    }
+
+    function calculate(){
+      const W = clamp(parseFloat($("dough").value),0);
+      const H = clamp(parseFloat($("hydration").value)/100,0);
+      const isDryYeast = $("typeDryYeast").checked;
+      const S = isDryYeast ? 0 : clamp(parseFloat($("starter").value),0);
+      const p = clamp(parseFloat($("saltPct").value)/100,0);
+
+      // Salt is % of TOTAL dough weight
+      const saltG = p * W;
+
+      // Starter (100% hydration)
+      const starterFlour = S / 2;
+      const starterWater = S / 2;
+
+      // Total flour & water
+      const Ft = (W - saltG) / (1 + H);
+      const Wt = H * Ft;
+
+      // What to add
+      const flourAdd = Ft - starterFlour;
+      const waterAdd = Wt - starterWater;
+
+      // Preferment %
+      const preferment = Ft > 0 ? (starterFlour / Ft) * 100 : 0;
+
+      $("flourAdd").textContent = fmt(flourAdd,0);
+      $("waterAdd").textContent = fmt(waterAdd,0);
+      $("saltG").textContent = fmt(saltG,1);
+      $("prefPct").textContent = fmt(preferment,1);
+      $("checkHyd").textContent = fmt((Wt/Ft)*100,1);
+
+      const warn = $("warnBox");
+      if (flourAdd < 0 || waterAdd < 0){
+        warn.style.display = "block";
+        warn.textContent = "Starter is too large for this dough weight / hydration.";
+      } else {
+        warn.style.display = "none";
+      }
+    }
+
+    $("typeDryYeast").addEventListener("change", updateLeaveningType);
+    $("typeStarter").addEventListener("change", updateLeaveningType);
+    $("resetBtn").addEventListener("click", reset);
+
+    ["dough","hydration","starter","saltPct"].forEach(id=>{
+      $(id).addEventListener("input", calculate);
+    });
+
+    // Copy functionality
+    $("copyBtn").addEventListener("click", function(){
+      const hydration = $("hydration").value;
+      const isDryYeast = $("typeDryYeast").checked;
+      const starter = isDryYeast ? "0" : $("starter").value;
+      const water = $("waterAdd").textContent;
+      const flour = $("flourAdd").textContent;
+      const salt = $("saltG").textContent;
+      
+      const text = `Hydration: ${hydration}%\nStarter: ${starter}g\nWater: ${water}g\nFlour: ${flour}g\nSalt: ${salt}g`;
+      
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = $("copyBtn");
+        const originalText = btn.innerHTML;
+        btn.classList.add("copied");
+        btn.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Copied!';
+        
+        setTimeout(() => {
+          btn.classList.remove("copied");
+          btn.innerHTML = originalText;
+        }, 2000);
+      }).catch(err => {
+        console.error('Failed to copy:', err);
+      });
+    });
+
+    calculate();
+  </script>
+</body>
+</html>
+
