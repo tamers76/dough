@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Sourdough Calculator | Artisan Precision</title>
+  <title>Dough Calculator | Artisan Precision</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -24,6 +24,7 @@
       --emerald:#10b981;
       --sapphire:#3b82f6;
       --ruby:#ef4444;
+      --amber:#f59e0b;
       --shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
       --shadow-gold: 0 8px 32px rgba(212,175,55,0.15);
       --radius:20px;
@@ -611,6 +612,402 @@
       color:var(--emerald);
     }
 
+    /* Mode Selector Tabs */
+    .mode-selector{
+      display:flex;
+      gap:8px;
+      margin-bottom:24px;
+      background:rgba(0,0,0,0.3);
+      padding:6px;
+      border-radius:var(--radius-sm);
+      border:1px solid var(--card-border);
+    }
+    .mode-tab{
+      flex:1;
+      padding:12px 16px;
+      border:none;
+      background:transparent;
+      color:var(--text-secondary);
+      font-size:13px;
+      font-weight:600;
+      font-family:'DM Sans', sans-serif;
+      cursor:pointer;
+      border-radius:8px;
+      transition:all 0.25s ease;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:4px;
+    }
+    .mode-tab .mode-icon{
+      font-size:20px;
+    }
+    .mode-tab:hover{
+      background:rgba(255,255,255,0.05);
+      color:var(--text);
+    }
+    .mode-tab.active{
+      background:linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+      color:var(--bg);
+      box-shadow:var(--shadow-gold);
+    }
+
+    /* Elegant Slider Component */
+    .elegant-slider-wrap{
+      padding:20px 24px;
+      background:linear-gradient(135deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.15) 100%);
+      border:1px solid var(--card-border);
+      border-radius:var(--radius-sm);
+      margin-bottom:16px;
+    }
+    .elegant-slider-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      margin-bottom:20px;
+    }
+    .elegant-slider-label{
+      font-size:12px;
+      font-weight:600;
+      text-transform:uppercase;
+      letter-spacing:0.06em;
+      color:var(--text-secondary);
+    }
+    .elegant-slider-display{
+      text-align:right;
+    }
+    .elegant-slider-value{
+      font-family:'Cormorant Garamond', Georgia, serif;
+      font-size:32px;
+      font-weight:700;
+      line-height:1;
+      background:linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 100%);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip:text;
+    }
+    .elegant-slider-unit{
+      font-size:13px;
+      color:var(--muted);
+      margin-left:2px;
+    }
+    .elegant-slider-track{
+      position:relative;
+      height:6px;
+      background:rgba(255,255,255,0.08);
+      border-radius:3px;
+      overflow:visible;
+    }
+    .elegant-slider-fill{
+      position:absolute;
+      left:0;
+      top:0;
+      height:100%;
+      background:linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-light));
+      border-radius:3px;
+      pointer-events:none;
+      transition:width 0.1s ease;
+    }
+    .elegant-slider-input{
+      -webkit-appearance:none;
+      appearance:none;
+      position:absolute;
+      top:50%;
+      left:0;
+      transform:translateY(-50%);
+      width:100%;
+      height:24px;
+      background:transparent;
+      cursor:pointer;
+      margin:0;
+    }
+    .elegant-slider-input::-webkit-slider-thumb{
+      -webkit-appearance:none;
+      appearance:none;
+      width:20px;
+      height:20px;
+      border-radius:50%;
+      background:var(--bg);
+      border:3px solid var(--gold);
+      box-shadow:0 2px 12px rgba(0,0,0,0.4), 0 0 0 4px rgba(212,175,55,0.15);
+      cursor:pointer;
+      transition:all 0.2s ease;
+    }
+    .elegant-slider-input::-webkit-slider-thumb:hover{
+      border-width:4px;
+      box-shadow:0 4px 20px rgba(0,0,0,0.5), 0 0 0 6px rgba(212,175,55,0.2);
+    }
+    .elegant-slider-input::-moz-range-thumb{
+      width:18px;
+      height:18px;
+      border-radius:50%;
+      background:var(--bg);
+      border:3px solid var(--gold);
+      box-shadow:0 2px 12px rgba(0,0,0,0.4), 0 0 0 4px rgba(212,175,55,0.15);
+      cursor:pointer;
+    }
+    .elegant-slider-input:focus{
+      outline:none;
+    }
+    .elegant-slider-ticks{
+      display:flex;
+      justify-content:space-between;
+      margin-top:12px;
+      padding:0 2px;
+    }
+    .elegant-slider-tick{
+      font-size:10px;
+      color:var(--muted);
+      opacity:0.7;
+    }
+    .elegant-slider-result{
+      margin-top:16px;
+      padding:14px 16px;
+      background:linear-gradient(135deg, rgba(16,185,129,0.08) 0%, rgba(16,185,129,0.03) 100%);
+      border:1px solid rgba(16,185,129,0.15);
+      border-radius:10px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+    .elegant-slider-result-label{
+      font-size:13px;
+      color:var(--text-secondary);
+      font-weight:500;
+    }
+    .elegant-slider-result-value{
+      font-family:'Cormorant Garamond', Georgia, serif;
+      font-size:22px;
+      font-weight:700;
+      color:var(--emerald);
+    }
+
+    /* Elegant Button Group */
+    .quantity-buttons-group{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+    .qty-btn-elegant{
+      min-width:48px;
+      height:48px;
+      border:2px solid rgba(212,175,55,0.25);
+      background:transparent;
+      color:var(--text-secondary);
+      font-size:16px;
+      font-weight:600;
+      font-family:'DM Sans', sans-serif;
+      cursor:pointer;
+      border-radius:12px;
+      transition:all 0.25s ease;
+      position:relative;
+      overflow:hidden;
+    }
+    .qty-btn-elegant::before{
+      content:'';
+      position:absolute;
+      inset:0;
+      background:linear-gradient(135deg, rgba(212,175,55,0.1) 0%, rgba(212,175,55,0.05) 100%);
+      opacity:0;
+      transition:opacity 0.25s ease;
+    }
+    .qty-btn-elegant:hover{
+      border-color:rgba(212,175,55,0.5);
+      color:var(--text);
+    }
+    .qty-btn-elegant:hover::before{
+      opacity:1;
+    }
+    .qty-btn-elegant.active{
+      background:linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+      border-color:transparent;
+      color:var(--bg);
+      box-shadow:var(--shadow-gold);
+    }
+    .qty-btn-elegant.active::before{
+      opacity:0;
+    }
+
+    /* Settings Panel */
+    .settings-toggle{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      width:100%;
+      padding:12px 16px;
+      margin-top:24px;
+      background:rgba(0,0,0,0.2);
+      border:1px solid var(--card-border);
+      border-radius:var(--radius-sm);
+      color:var(--text-secondary);
+      font-size:13px;
+      font-weight:600;
+      font-family:'DM Sans', sans-serif;
+      cursor:pointer;
+      transition:all 0.25s ease;
+    }
+    .settings-toggle svg{
+      width:16px;
+      height:16px;
+      transition:transform 0.3s ease;
+    }
+    .settings-toggle:hover{
+      background:rgba(212,175,55,0.05);
+      border-color:rgba(212,175,55,0.2);
+      color:var(--text);
+    }
+    .settings-toggle.open svg{
+      transform:rotate(180deg);
+    }
+    .settings-panel{
+      overflow:hidden;
+      max-height:0;
+      opacity:0;
+      transition:all 0.3s ease;
+    }
+    .settings-panel.open{
+      max-height:600px;
+      opacity:1;
+      margin-top:16px;
+    }
+    .settings-content{
+      padding:20px;
+      background:rgba(0,0,0,0.2);
+      border:1px solid var(--card-border);
+      border-radius:var(--radius-sm);
+    }
+    .settings-title{
+      font-family:'Cormorant Garamond', Georgia, serif;
+      font-size:18px;
+      font-weight:600;
+      color:var(--gold);
+      margin-bottom:16px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .settings-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:16px;
+    }
+    @media (max-width: 600px){
+      .settings-grid{grid-template-columns:1fr}
+    }
+    .setting-item{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .setting-label{
+      font-size:12px;
+      font-weight:600;
+      color:var(--text-secondary);
+      text-transform:uppercase;
+      letter-spacing:0.05em;
+    }
+    .setting-input{
+      width:100%;
+      padding:12px 14px;
+      border:1px solid rgba(212,175,55,0.15);
+      border-radius:8px;
+      background:rgba(0,0,0,0.3);
+      color:var(--text);
+      font-size:15px;
+      font-family:'DM Sans', sans-serif;
+      font-weight:500;
+      outline:none;
+      transition:all 0.25s ease;
+    }
+    .setting-input:focus{
+      border-color:var(--gold);
+      box-shadow:0 0 0 3px rgba(212,175,55,0.1);
+    }
+    .settings-actions{
+      display:flex;
+      gap:12px;
+      margin-top:16px;
+    }
+    .save-settings{
+      flex:1;
+      padding:12px 20px;
+      background:linear-gradient(135deg, var(--emerald) 0%, #059669 100%);
+      border:none;
+      border-radius:8px;
+      color:white;
+      font-size:13px;
+      font-weight:600;
+      font-family:'DM Sans', sans-serif;
+      cursor:pointer;
+      transition:all 0.25s ease;
+    }
+    .save-settings:hover{
+      transform:translateY(-2px);
+      box-shadow:0 8px 24px rgba(16,185,129,0.3);
+    }
+    .reset-settings{
+      padding:12px 20px;
+      background:transparent;
+      border:1px solid rgba(212,175,55,0.2);
+      border-radius:8px;
+      color:var(--text-secondary);
+      font-size:13px;
+      font-weight:600;
+      font-family:'DM Sans', sans-serif;
+      cursor:pointer;
+      transition:all 0.25s ease;
+    }
+    .reset-settings:hover{
+      border-color:rgba(212,175,55,0.4);
+      color:var(--text);
+    }
+    .settings-saved{
+      display:none;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
+      padding:10px;
+      background:rgba(16,185,129,0.1);
+      border:1px solid rgba(16,185,129,0.3);
+      border-radius:8px;
+      color:var(--emerald);
+      font-size:13px;
+      font-weight:600;
+      margin-top:12px;
+    }
+    .settings-saved.show{
+      display:flex;
+    }
+
+    /* Calculated dough weight display */
+    .dough-calc-display{
+      padding:16px;
+      background:linear-gradient(135deg, rgba(212,175,55,0.1) 0%, rgba(212,175,55,0.05) 100%);
+      border:1px solid rgba(212,175,55,0.2);
+      border-radius:var(--radius-sm);
+      margin-bottom:16px;
+    }
+    .dough-calc-label{
+      font-size:11px;
+      font-weight:600;
+      text-transform:uppercase;
+      letter-spacing:0.08em;
+      color:var(--muted);
+      margin-bottom:4px;
+    }
+    .dough-calc-value{
+      font-family:'Cormorant Garamond', Georgia, serif;
+      font-size:28px;
+      font-weight:700;
+      color:var(--gold);
+    }
+    .dough-calc-breakdown{
+      font-size:12px;
+      color:var(--text-secondary);
+      margin-top:4px;
+    }
+
     .warn{
       margin-top: 12px;
       padding: 14px 16px;
@@ -676,7 +1073,7 @@
           <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
         </div>
       </div>
-      <h1>Sourdough Calculator</h1>
+      <h1>Dough Calculator</h1>
       <p class="subtitle">
         Precision calculations for artisan bakers. Overall hydration includes starter 
         (fixed at <strong>100% hydration</strong>).
@@ -694,14 +1091,53 @@
             </span>
             Recipe Inputs
           </h2>
-          <p class="hint">Enter your desired parameters below</p>
+          <p class="hint">Select your bake type and enter parameters</p>
         </div>
         <div class="body">
-          <div class="form">
-            <div class="field">
-              <label>Dough Weight <span class="unit">(grams)</span></label>
-              <input id="dough" type="number" inputmode="decimal" min="0" step="1" value="500" placeholder="500">
+          <!-- Mode Selector -->
+          <div class="mode-selector">
+            <button class="mode-tab active" data-mode="sourdough" type="button">
+              <span class="mode-icon">🍞</span>
+              Sourdough
+            </button>
+            <button class="mode-tab" data-mode="baguette" type="button">
+              <span class="mode-icon">🥖</span>
+              Baguette
+            </button>
+            <button class="mode-tab" data-mode="pizza" type="button">
+              <span class="mode-icon">🍕</span>
+              Pizza
+            </button>
+          </div>
+
+          <!-- Quantity Slider -->
+          <div class="elegant-slider-wrap" id="quantitySliderWrap">
+            <div class="elegant-slider-header">
+              <span class="elegant-slider-label" id="quantityLabel">Number of Loaves</span>
+              <div class="elegant-slider-display">
+                <span class="elegant-slider-value" id="quantityValue">1</span>
+              </div>
             </div>
+            <div class="elegant-slider-track">
+              <div class="elegant-slider-fill" id="quantityFill" style="width:0%"></div>
+              <input type="range" class="elegant-slider-input" id="quantitySlider" min="1" max="4" value="1" step="1">
+            </div>
+            <div class="elegant-slider-ticks" id="quantityTicks">
+              <span class="elegant-slider-tick">1</span>
+              <span class="elegant-slider-tick">2</span>
+              <span class="elegant-slider-tick">3</span>
+              <span class="elegant-slider-tick">4</span>
+            </div>
+          </div>
+
+          <!-- Calculated Dough Weight Display -->
+          <div class="dough-calc-display">
+            <div class="dough-calc-label">Total Dough Weight</div>
+            <div class="dough-calc-value"><span id="totalDoughWeight">850</span>g</div>
+            <div class="dough-calc-breakdown" id="doughBreakdown">1 × 850g per loaf</div>
+          </div>
+
+          <div class="form">
             <div class="field">
               <label>Hydration <span class="unit">(percent)</span></label>
               <input id="hydration" type="number" inputmode="decimal" min="0" step="0.1" value="70" placeholder="70">
@@ -725,7 +1161,27 @@
                 </div>
               </div>
               <div class="starter-input-wrapper visible" id="starterInputWrapper">
-                <input id="starter" type="number" inputmode="decimal" min="0" step="1" value="120" placeholder="Starter weight in grams">
+                <div class="elegant-slider-wrap" style="margin-top:12px; background:transparent; border:none; padding:0;">
+                  <div class="elegant-slider-header">
+                    <span class="elegant-slider-label">Preferment Ratio</span>
+                    <div class="elegant-slider-display">
+                      <span class="elegant-slider-value" id="prefermentValue">15</span><span class="elegant-slider-unit">%</span>
+                    </div>
+                  </div>
+                  <div class="elegant-slider-track">
+                    <div class="elegant-slider-fill" id="prefermentFill" style="width:50%"></div>
+                    <input type="range" class="elegant-slider-input" id="prefermentSlider" min="5" max="25" value="15" step="1">
+                  </div>
+                  <div class="elegant-slider-ticks">
+                    <span class="elegant-slider-tick">5%</span>
+                    <span class="elegant-slider-tick">15%</span>
+                    <span class="elegant-slider-tick">25%</span>
+                  </div>
+                  <div class="elegant-slider-result">
+                    <span class="elegant-slider-result-label">Starter Needed</span>
+                    <span class="elegant-slider-result-value"><span id="starterNeeded">0</span>g</span>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="field">
@@ -737,6 +1193,53 @@
           <div class="row">
             <button class="primary" id="calcBtn" type="button">Calculate Recipe</button>
             <button class="ghost" id="resetBtn" type="button">Reset</button>
+          </div>
+
+          <!-- Settings Toggle -->
+          <button class="settings-toggle" id="settingsToggle" type="button">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
+            </svg>
+            Settings
+            <svg viewBox="0 0 24 24" fill="currentColor" style="margin-left:auto;">
+              <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+            </svg>
+          </button>
+
+          <!-- Settings Panel -->
+          <div class="settings-panel" id="settingsPanel">
+            <div class="settings-content">
+              <div class="settings-title">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                  <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
+                </svg>
+                Default Weights (grams per item)
+              </div>
+              <div class="settings-grid">
+                <div class="setting-item">
+                  <label class="setting-label">🍞 Sourdough Loaf</label>
+                  <input class="setting-input" id="defaultSourdough" type="number" min="100" step="10" value="850">
+                </div>
+                <div class="setting-item">
+                  <label class="setting-label">🥖 Baguette</label>
+                  <input class="setting-input" id="defaultBaguette" type="number" min="50" step="10" value="200">
+                </div>
+                <div class="setting-item">
+                  <label class="setting-label">🍕 Pizza</label>
+                  <input class="setting-input" id="defaultPizza" type="number" min="50" step="10" value="250">
+                </div>
+              </div>
+              <div class="settings-actions">
+                <button class="save-settings" id="saveSettings" type="button">Save Changes</button>
+                <button class="reset-settings" id="resetSettings" type="button">Reset Defaults</button>
+              </div>
+              <div class="settings-saved" id="settingsSaved">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                </svg>
+                Settings saved successfully!
+              </div>
+            </div>
           </div>
 
           <div class="note">
@@ -776,8 +1279,8 @@
               <div class="val"><span id="saltG">—</span><span class="small">g</span></div>
             </div>
             <div class="kpi">
-              <div class="name">Preferment Ratio</div>
-              <div class="val"><span id="prefPct">—</span><span class="small">%</span></div>
+              <div class="name">Starter</div>
+              <div class="val"><span id="starterDisplay">—</span><span class="small">g</span></div>
             </div>
 
             <div class="footer">
@@ -809,6 +1312,226 @@
   <script>
     const $ = (id) => document.getElementById(id);
 
+    // Default settings
+    const DEFAULT_SETTINGS = {
+      sourdough: 850,
+      baguette: 200,
+      pizza: 250
+    };
+
+    // Mode configuration
+    const MODE_CONFIG = {
+      sourdough: {
+        label: 'Number of Loaves',
+        itemName: 'loaf',
+        itemNamePlural: 'loaves',
+        maxQty: 4,
+        settingKey: 'sourdough',
+        useSlider: false
+      },
+      baguette: {
+        label: 'Number of Baguettes',
+        itemName: 'baguette',
+        itemNamePlural: 'baguettes',
+        maxQty: 4,
+        settingKey: 'baguette',
+        useSlider: true
+      },
+      pizza: {
+        label: 'Number of Pizzas',
+        itemName: 'pizza',
+        itemNamePlural: 'pizzas',
+        maxQty: 8,
+        settingKey: 'pizza',
+        useSlider: true
+      }
+    };
+
+    // State
+    let currentMode = 'sourdough';
+    let currentQty = 1;
+    let settings = { ...DEFAULT_SETTINGS };
+
+    // Load settings from localStorage
+    function loadSettings() {
+      try {
+        const saved = localStorage.getItem('doughCalculatorSettings');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          settings = { ...DEFAULT_SETTINGS, ...parsed };
+        }
+      } catch (e) {
+        console.error('Failed to load settings:', e);
+        settings = { ...DEFAULT_SETTINGS };
+      }
+      updateSettingsInputs();
+    }
+
+    // Save settings to localStorage
+    function saveSettings() {
+      try {
+        settings.sourdough = parseInt($('defaultSourdough').value) || DEFAULT_SETTINGS.sourdough;
+        settings.baguette = parseInt($('defaultBaguette').value) || DEFAULT_SETTINGS.baguette;
+        settings.pizza = parseInt($('defaultPizza').value) || DEFAULT_SETTINGS.pizza;
+        
+        localStorage.setItem('doughCalculatorSettings', JSON.stringify(settings));
+        
+        // Show success message
+        $('settingsSaved').classList.add('show');
+        setTimeout(() => {
+          $('settingsSaved').classList.remove('show');
+        }, 2000);
+        
+        updateDoughWeight();
+        calculate();
+      } catch (e) {
+        console.error('Failed to save settings:', e);
+      }
+    }
+
+    // Reset settings to defaults
+    function resetSettingsToDefaults() {
+      settings = { ...DEFAULT_SETTINGS };
+      updateSettingsInputs();
+      localStorage.removeItem('doughCalculatorSettings');
+      updateDoughWeight();
+      calculate();
+    }
+
+    // Update settings inputs with current values
+    function updateSettingsInputs() {
+      $('defaultSourdough').value = settings.sourdough;
+      $('defaultBaguette').value = settings.baguette;
+      $('defaultPizza').value = settings.pizza;
+    }
+
+    // Toggle settings panel
+    function toggleSettings() {
+      const panel = $('settingsPanel');
+      const toggle = $('settingsToggle');
+      panel.classList.toggle('open');
+      toggle.classList.toggle('open');
+    }
+
+    // Update quantity selector based on mode
+    function updateQuantitySlider() {
+      const config = MODE_CONFIG[currentMode];
+      const sliderWrap = $('quantitySliderWrap');
+      if (!sliderWrap) return;
+
+      // Clamp qty to the mode range
+      if (currentQty > config.maxQty) currentQty = config.maxQty;
+      if (currentQty < 1) currentQty = 1;
+      
+      if (!config.useSlider) {
+        // Show buttons for Sourdough
+        sliderWrap.innerHTML = `
+          <div style="margin-bottom:20px;">
+            <label style="display:block; margin-bottom:12px;">${config.label}</label>
+            <div class="quantity-buttons-group" id="quantityButtons">
+              ${Array.from({length: config.maxQty}, (_, i) => {
+                const qty = i + 1;
+                return `<button class="qty-btn-elegant ${qty === currentQty ? 'active' : ''}" data-qty="${qty}" type="button">${qty}</button>`;
+              }).join('')}
+            </div>
+          </div>
+        `;
+        
+        // Add event listeners to buttons
+        document.querySelectorAll('.qty-btn-elegant').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const qty = parseInt(btn.dataset.qty);
+            currentQty = qty;
+            document.querySelectorAll('.qty-btn-elegant').forEach(b => b.classList.toggle('active', parseInt(b.dataset.qty) === qty));
+            updateDoughWeight();
+            calculate();
+          });
+        });
+      } else {
+        // Show slider for Baguette and Pizza
+        sliderWrap.innerHTML = `
+          <div class="elegant-slider-wrap">
+            <div class="elegant-slider-header">
+              <span class="elegant-slider-label">${config.label}</span>
+              <div class="elegant-slider-display">
+                <span class="elegant-slider-value" id="quantityValue">${currentQty}</span>
+              </div>
+            </div>
+            <div class="elegant-slider-track">
+              <div class="elegant-slider-fill" id="quantityFill" style="width:0%"></div>
+              <input type="range" class="elegant-slider-input" id="quantitySlider" min="1" max="${config.maxQty}" value="${currentQty}" step="1">
+            </div>
+            <div class="elegant-slider-ticks" id="quantityTicks">
+              ${Array.from({length: config.maxQty}, (_, i) => `<span class="elegant-slider-tick">${i + 1}</span>`).join('')}
+            </div>
+          </div>
+        `;
+        
+        // Add event listener to slider
+        $('quantitySlider').addEventListener('input', function() {
+          updateQuantityDisplay();
+          updateDoughWeight();
+          calculate();
+        });
+        
+        updateQuantityDisplay();
+      }
+    }
+
+    // Update quantity display
+    function updateQuantityDisplay() {
+      const slider = $('quantitySlider');
+      if (!slider) return; // Slider doesn't exist for button-based modes
+      
+      const value = slider.value;
+      const max = parseInt(slider.max);
+      const percentage = max > 1 ? ((value - 1) / (max - 1)) * 100 : 0;
+      
+      const quantityValue = $('quantityValue');
+      if (quantityValue) {
+        quantityValue.textContent = value;
+      }
+      
+      const quantityFill = $('quantityFill');
+      if (quantityFill) {
+        quantityFill.style.width = percentage + '%';
+      }
+      
+      currentQty = parseInt(value);
+    }
+
+    // Select mode
+    function selectMode(mode) {
+      currentMode = mode;
+      currentQty = 1; // Reset to 1 when changing mode
+      
+      document.querySelectorAll('.mode-tab').forEach(tab => {
+        tab.classList.toggle('active', tab.dataset.mode === mode);
+      });
+      
+      updateQuantitySlider();
+      updateDoughWeight();
+      calculate();
+    }
+
+    // Update dough weight display
+    function updateDoughWeight() {
+      const config = MODE_CONFIG[currentMode];
+      const weightPerItem = settings[config.settingKey];
+      const totalWeight = currentQty * weightPerItem;
+      
+      $('totalDoughWeight').textContent = totalWeight.toLocaleString();
+      
+      const itemName = currentQty === 1 ? config.itemName : config.itemNamePlural;
+      $('doughBreakdown').textContent = `${currentQty} × ${weightPerItem}g per ${config.itemName}`;
+    }
+
+    // Get current dough weight
+    function getDoughWeight() {
+      const config = MODE_CONFIG[currentMode];
+      return currentQty * settings[config.settingKey];
+    }
+
     function clamp(n, min=0){ return isFinite(n) ? Math.max(min, n) : 0; }
     function roundTo(n, d=0){ const p=10**d; return Math.round(n*p)/p; }
     function fmt(n,d=0){ return roundTo(n,d).toLocaleString(undefined,{minimumFractionDigits:d,maximumFractionDigits:d}); }
@@ -819,56 +1542,71 @@
       if (isDryYeast){
         wrapper.classList.remove("visible");
         wrapper.classList.add("hidden");
-        $("starter").value = 0;
       } else {
         wrapper.classList.remove("hidden");
         wrapper.classList.add("visible");
-        if ($("starter").value === "0" || $("starter").value === ""){
-          $("starter").value = 120;
-        }
       }
       calculate();
     }
 
     function reset(){
-      $("dough").value = 500;
+      currentQty = 1;
       $("hydration").value = 70;
-      $("starter").value = 120;
+      $("prefermentSlider").value = 15;
+      updatePrefermentDisplay();
       $("saltPct").value = 1;
       $("typeStarter").checked = true;
       updateLeaveningType();
+      updateQuantitySlider();
+      updateDoughWeight();
       calculate();
     }
 
+    function updatePrefermentDisplay() {
+      const value = $("prefermentSlider").value;
+      const min = parseInt($("prefermentSlider").min);
+      const max = parseInt($("prefermentSlider").max);
+      const percentage = ((value - min) / (max - min)) * 100;
+      
+      $("prefermentValue").textContent = value;
+      $("prefermentFill").style.width = percentage + '%';
+    }
+
     function calculate(){
-      const W = clamp(parseFloat($("dough").value),0);
+      const W = getDoughWeight();
       const H = clamp(parseFloat($("hydration").value)/100,0);
       const isDryYeast = $("typeDryYeast").checked;
-      const S = isDryYeast ? 0 : clamp(parseFloat($("starter").value),0);
+      const prefermentPct = clamp(parseFloat($("prefermentSlider").value)/100, 0.05);
       const p = clamp(parseFloat($("saltPct").value)/100,0);
 
       // Salt is % of TOTAL dough weight
       const saltG = p * W;
 
+      // Total flour & water (before calculating starter)
+      const Ft = (W - saltG) / (1 + H);
+      const Wt = H * Ft;
+
+      // Calculate starter from preferment ratio
+      // Preferment % = (starterFlour / Ft) * 100
+      // starterFlour = S / 2 (100% hydration starter)
+      // So: S = 2 * Ft * prefermentPct
+      const S = isDryYeast ? 0 : 2 * Ft * prefermentPct;
+
       // Starter (100% hydration)
       const starterFlour = S / 2;
       const starterWater = S / 2;
-
-      // Total flour & water
-      const Ft = (W - saltG) / (1 + H);
-      const Wt = H * Ft;
 
       // What to add
       const flourAdd = Ft - starterFlour;
       const waterAdd = Wt - starterWater;
 
-      // Preferment %
-      const preferment = Ft > 0 ? (starterFlour / Ft) * 100 : 0;
+      // Update starter display in input section
+      $("starterNeeded").textContent = fmt(S, 0);
 
       $("flourAdd").textContent = fmt(flourAdd,0);
       $("waterAdd").textContent = fmt(waterAdd,0);
       $("saltG").textContent = fmt(saltG,1);
-      $("prefPct").textContent = fmt(preferment,1);
+      $("starterDisplay").textContent = fmt(S,0);
       $("checkHyd").textContent = fmt((Wt/Ft)*100,1);
 
       const warn = $("warnBox");
@@ -880,24 +1618,56 @@
       }
     }
 
+    // Event Listeners
     $("typeDryYeast").addEventListener("change", updateLeaveningType);
     $("typeStarter").addEventListener("change", updateLeaveningType);
     $("resetBtn").addEventListener("click", reset);
+    $("calcBtn").addEventListener("click", calculate);
 
-    ["dough","hydration","starter","saltPct"].forEach(id=>{
+    // Mode tabs
+    document.querySelectorAll('.mode-tab').forEach(tab => {
+      tab.addEventListener('click', () => selectMode(tab.dataset.mode));
+    });
+
+    // Quantity slider (only for slider-based modes)
+    const quantitySlider = $("quantitySlider");
+    if (quantitySlider) {
+      quantitySlider.addEventListener("input", function() {
+        updateQuantityDisplay();
+        updateDoughWeight();
+        calculate();
+      });
+    }
+
+    // Settings
+    $("settingsToggle").addEventListener("click", toggleSettings);
+    $("saveSettings").addEventListener("click", saveSettings);
+    $("resetSettings").addEventListener("click", resetSettingsToDefaults);
+
+    ["hydration","saltPct"].forEach(id=>{
       $(id).addEventListener("input", calculate);
+    });
+
+    // Preferment slider
+    $("prefermentSlider").addEventListener("input", function() {
+      updatePrefermentDisplay();
+      calculate();
     });
 
     // Copy functionality
     $("copyBtn").addEventListener("click", function(){
+      const config = MODE_CONFIG[currentMode];
       const hydration = $("hydration").value;
       const isDryYeast = $("typeDryYeast").checked;
-      const starter = isDryYeast ? "0" : $("starter").value;
+      const preferment = $("prefermentSlider").value;
+      const starter = $("starterDisplay").textContent;
       const water = $("waterAdd").textContent;
       const flour = $("flourAdd").textContent;
       const salt = $("saltG").textContent;
+      const doughWeight = getDoughWeight();
+      const itemName = currentQty === 1 ? config.itemName : config.itemNamePlural;
       
-      const text = `Hydration: ${hydration}%\nStarter: ${starter}g\nWater: ${water}g\nFlour: ${flour}g\nSalt: ${salt}g`;
+      const text = `${currentMode.charAt(0).toUpperCase() + currentMode.slice(1)} Recipe (${currentQty} ${itemName})\nTotal Dough: ${doughWeight}g\nHydration: ${hydration}%\nPreferment: ${preferment}%\nStarter: ${starter}g\nWater: ${water}g\nFlour: ${flour}g\nSalt: ${salt}g`;
       
       navigator.clipboard.writeText(text).then(() => {
         const btn = $("copyBtn");
@@ -914,6 +1684,11 @@
       });
     });
 
+    // Initialize
+    loadSettings();
+    updateQuantitySlider();
+    updatePrefermentDisplay();
+    updateDoughWeight();
     calculate();
   </script>
 </body>
