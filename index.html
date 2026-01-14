@@ -1327,29 +1327,34 @@
         itemNamePlural: 'loaves',
         maxQty: 4,
         settingKey: 'sourdough',
-        useSlider: false
+        useSlider: false,
+        defaultQty: 2
       },
       baguette: {
         label: 'Number of Baguettes',
         itemName: 'baguette',
         itemNamePlural: 'baguettes',
-        maxQty: 4,
+        allowedQtys: [2, 4, 6],
         settingKey: 'baguette',
-        useSlider: true
+        useSlider: false,
+        defaultQty: 4
       },
       pizza: {
         label: 'Number of Pizzas',
         itemName: 'pizza',
         itemNamePlural: 'pizzas',
-        maxQty: 8,
+        maxQty: 12,
+        sliderMin: 4,
+        sliderStep: 2,
         settingKey: 'pizza',
-        useSlider: true
+        useSlider: true,
+        defaultQty: 6
       }
     };
 
     // State
     let currentMode = 'sourdough';
-    let currentQty = 1;
+    let currentQty = MODE_CONFIG.sourdough.defaultQty || 1;
     let settings = { ...DEFAULT_SETTINGS };
 
     // Load settings from localStorage
@@ -1419,20 +1424,37 @@
       const sliderWrap = $('quantitySliderWrap');
       if (!sliderWrap) return;
 
-      // Clamp qty to the mode range
-      if (currentQty > config.maxQty) currentQty = config.maxQty;
-      if (currentQty < 1) currentQty = 1;
+      // Ensure qty is valid for the mode
+      if (Array.isArray(config.allowedQtys) && config.allowedQtys.length) {
+        if (!config.allowedQtys.includes(currentQty)) {
+          currentQty = (typeof config.defaultQty === 'number') ? config.defaultQty : config.allowedQtys[0];
+        }
+      } else {
+        // Clamp qty to the mode range
+        const minQty = (config.useSlider && typeof config.sliderMin === 'number') ? config.sliderMin : 1;
+        const maxQty = (typeof config.maxQty === 'number') ? config.maxQty : 1;
+        if (currentQty > maxQty) currentQty = maxQty;
+        if (currentQty < minQty) currentQty = minQty;
+
+        if (config.useSlider) {
+          const step = (typeof config.sliderStep === 'number' && config.sliderStep > 0) ? config.sliderStep : 1;
+          currentQty = Math.round((currentQty - minQty) / step) * step + minQty;
+          if (currentQty > maxQty) currentQty = maxQty;
+          if (currentQty < minQty) currentQty = minQty;
+        }
+      }
       
       if (!config.useSlider) {
         // Show buttons for Sourdough
+        const quantities = Array.isArray(config.allowedQtys) && config.allowedQtys.length
+          ? config.allowedQtys
+          : Array.from({length: config.maxQty}, (_, i) => i + 1);
+
         sliderWrap.innerHTML = `
           <div style="margin-bottom:20px;">
             <label style="display:block; margin-bottom:12px;">${config.label}</label>
             <div class="quantity-buttons-group" id="quantityButtons">
-              ${Array.from({length: config.maxQty}, (_, i) => {
-                const qty = i + 1;
-                return `<button class="qty-btn-elegant ${qty === currentQty ? 'active' : ''}" data-qty="${qty}" type="button">${qty}</button>`;
-              }).join('')}
+              ${quantities.map(qty => `<button class="qty-btn-elegant ${qty === currentQty ? 'active' : ''}" data-qty="${qty}" type="button">${qty}</button>`).join('')}
             </div>
           </div>
         `;
@@ -1449,6 +1471,11 @@
         });
       } else {
         // Show slider for Baguette and Pizza
+        const sliderMin = (typeof config.sliderMin === 'number') ? config.sliderMin : 1;
+        const sliderStep = (typeof config.sliderStep === 'number' && config.sliderStep > 0) ? config.sliderStep : 1;
+        const tickValues = [];
+        for (let v = sliderMin; v <= config.maxQty; v += sliderStep) tickValues.push(v);
+
         sliderWrap.innerHTML = `
           <div class="elegant-slider-wrap">
             <div class="elegant-slider-header">
@@ -1459,10 +1486,10 @@
             </div>
             <div class="elegant-slider-track">
               <div class="elegant-slider-fill" id="quantityFill" style="width:0%"></div>
-              <input type="range" class="elegant-slider-input" id="quantitySlider" min="1" max="${config.maxQty}" value="${currentQty}" step="1">
+              <input type="range" class="elegant-slider-input" id="quantitySlider" min="${sliderMin}" max="${config.maxQty}" value="${currentQty}" step="${sliderStep}">
             </div>
             <div class="elegant-slider-ticks" id="quantityTicks">
-              ${Array.from({length: config.maxQty}, (_, i) => `<span class="elegant-slider-tick">${i + 1}</span>`).join('')}
+              ${tickValues.map(v => `<span class="elegant-slider-tick">${v}</span>`).join('')}
             </div>
           </div>
         `;
@@ -1484,8 +1511,9 @@
       if (!slider) return; // Slider doesn't exist for button-based modes
       
       const value = slider.value;
+      const min = parseInt(slider.min);
       const max = parseInt(slider.max);
-      const percentage = max > 1 ? ((value - 1) / (max - 1)) * 100 : 0;
+      const percentage = max > min ? ((value - min) / (max - min)) * 100 : 0;
       
       const quantityValue = $('quantityValue');
       if (quantityValue) {
@@ -1503,7 +1531,10 @@
     // Select mode
     function selectMode(mode) {
       currentMode = mode;
-      currentQty = 1; // Reset to 1 when changing mode
+      const config = MODE_CONFIG[currentMode];
+      currentQty = (typeof config.defaultQty === 'number')
+        ? config.defaultQty
+        : (Array.isArray(config.allowedQtys) && config.allowedQtys.length ? config.allowedQtys[0] : 1);
       
       document.querySelectorAll('.mode-tab').forEach(tab => {
         tab.classList.toggle('active', tab.dataset.mode === mode);
@@ -1550,7 +1581,10 @@
     }
 
     function reset(){
-      currentQty = 1;
+      const config = MODE_CONFIG[currentMode];
+      currentQty = (typeof config.defaultQty === 'number')
+        ? config.defaultQty
+        : (Array.isArray(config.allowedQtys) && config.allowedQtys.length ? config.allowedQtys[0] : 1);
       $("hydration").value = 70;
       $("prefermentSlider").value = 15;
       updatePrefermentDisplay();
