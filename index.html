@@ -1185,8 +1185,8 @@
               </div>
             </div>
             <div class="field">
-              <label>Salt <span class="unit">(% of total dough)</span></label>
-              <input id="saltPct" type="number" inputmode="decimal" min="0" step="0.1" value="1" placeholder="1">
+              <label>Salt <span class="unit">(% of flour)</span></label>
+              <input id="saltPct" type="number" inputmode="decimal" min="0" step="0.1" value="2" placeholder="2">
             </div>
           </div>
 
@@ -1245,9 +1245,9 @@
           <div class="note">
             <div class="note-title">Formula Reference</div>
             <div class="note-content">
-              <span class="mono">Ft = (W - saltG) / (1 + H)</span> &nbsp;•&nbsp; 
+              <span class="mono">Ft = W / (1 + H + p)</span> &nbsp;•&nbsp; 
               <span class="mono">Wt = H × Ft</span><br>
-              Salt = <span class="mono">p × W</span> &nbsp;•&nbsp; Starter contributes <span class="mono">S/2</span> flour and <span class="mono">S/2</span> water
+              Salt = <span class="mono">p × Ft</span> &nbsp;•&nbsp; Starter contributes <span class="mono">S/2</span> flour and <span class="mono">S/2</span> water
             </div>
           </div>
         </div>
@@ -1588,7 +1588,7 @@
       $("hydration").value = 70;
       $("prefermentSlider").value = 15;
       updatePrefermentDisplay();
-      $("saltPct").value = 1;
+      $("saltPct").value = 2;
       $("typeStarter").checked = true;
       updateLeaveningType();
       updateQuantitySlider();
@@ -1613,12 +1613,11 @@
       const prefermentPct = clamp(parseFloat($("prefermentSlider").value)/100, 0.05);
       const p = clamp(parseFloat($("saltPct").value)/100,0);
 
-      // Salt is % of TOTAL dough weight
-      const saltG = p * W;
-
-      // Total flour & water (before calculating starter)
-      const Ft = (W - saltG) / (1 + H);
+      // Salt is % of FLOUR weight (baker's percentage)
+      // W = Ft + Wt + saltG = Ft + H*Ft + p*Ft = Ft * (1 + H + p)
+      const Ft = W / (1 + H + p);
       const Wt = H * Ft;
+      const saltG = p * Ft;
 
       // Calculate starter from preferment ratio
       // Preferment % = (starterFlour / Ft) * 100
